@@ -1,0 +1,67 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: postgres_db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: rquilcat
+      POSTGRES_DB: transactions_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.5.3
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: confluentinc/cp-kafka:5.5.3
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_JMX_PORT: 9991
+
+  transaction-service:
+    build:
+      context: ./TransactionService
+      dockerfile: Dockerfile
+    container_name: transaction_service
+    restart: always
+    depends_on:
+      - postgres
+      - kafka
+    ports:
+      - "5001:5001"
+    environment:
+      - ConnectionStrings__Postgres=Host=postgres;Database=transactions_db;Username=postgres;Password=rquilcat
+      - Kafka__BootstrapServers=kafka:29092
+
+  anti-fraud-service:
+    build:
+      context: ./AntiFraudService
+      dockerfile: Dockerfile
+    container_name: anti_fraud_service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "5002:5002"
+    environment:
+      - Kafka__BootstrapServers=kafka:29092
+
+volumes:
+  postgres_data:

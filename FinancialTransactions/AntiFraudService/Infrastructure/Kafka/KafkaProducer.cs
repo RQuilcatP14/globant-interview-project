@@ -7,11 +7,13 @@ namespace AntiFraudMicroservice.Infrastructure.Kafka
     {
         private readonly IProducer<string, string> _producer;
 
-        public KafkaProducer()
+        public KafkaProducer(IConfiguration configuration)
         {
+            var bootstrapServers = configuration["Kafka:BootstrapServers"] ?? throw new ArgumentNullException("Kafka:BootstrapServers is missing");
+
             var config = new ProducerConfig
             {
-                BootstrapServers = "localhost:9092"
+                BootstrapServers = bootstrapServers,
             };
             _producer = new ProducerBuilder<string, string>(config).Build();
         }

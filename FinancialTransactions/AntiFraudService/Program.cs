@@ -11,6 +11,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IAntiFraudService, AntiFraudMicroservice.Application.Services.AntiFraudService>();
+builder.Services.AddSingleton<IAntiFraudService, AntiFraudMicroservice.Application.Services.AntiFraudService>();
 builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
 builder.Services.AddSingleton<IAntiFraudConsumer, AntiFraudConsumer>();
 

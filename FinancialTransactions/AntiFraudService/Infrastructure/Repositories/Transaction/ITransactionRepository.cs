@@ -6,6 +6,7 @@ namespace AntiFraudMicroservice.Infrastructure.Repositories
     {
         Task AddTransactionAsync(Transaction transaction);
         Task<Transaction?> GetTransactionByIdAsync(Guid transactionId);
+        Task<IEnumerable<Transaction>> GetTransactionsByDateAsync(DateTime date);
         Task UpdateTransactionAsync(Transaction transaction);
     }
 }

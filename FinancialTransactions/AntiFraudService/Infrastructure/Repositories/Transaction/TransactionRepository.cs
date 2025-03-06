@@ -1,5 +1,6 @@
 ﻿using AntiFraudMicroservice.Infrastructure.Persistence;
 using AntiFraudMicroservice.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AntiFraudMicroservice.Infrastructure.Repositories
 {
@@ -27,6 +28,13 @@ namespace AntiFraudMicroservice.Infrastructure.Repositories
         {
             _context.Transactions.Update(transaction);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Transaction>> GetTransactionsByDateAsync(DateTime date)
+        {
+            return await _context.Transactions
+                .Where(t => t.CreatedAt.Date == date.Date)
+                .ToListAsync();
         }
     }
 }

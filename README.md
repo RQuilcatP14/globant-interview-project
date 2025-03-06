@@ -2,14 +2,7 @@
 
 >El siguiente repositorio contiene la solucion al problema de AntiFraud utilizando microservicios construidos en .NET 8, Kafka y PostgreSQL, además de generar una comunicación entre microservicios Dockerizando las soluciones.
 
-## 📖 Tabla de contenidos
-
-- [Prerequisitos](#prerequisites)
-- [Configuracion Inicial](#initial-configuration)
-- [Ejecucion del Proyecto](#execution)
-- [Arquitectura de la solucion](#architecture)
-
-## 🚀 Prerequisitos {#prerequisites}
+## 🚀 Prerequisitos
 
 ### 🛠 **1. Instalar y Configurar PostgreSQL**
 
@@ -91,7 +84,7 @@ docker ps
 
 ---
 
-## 🗄️ Configuracion Inicial {#initial-configuration}
+## 🗄️ Configuracion Inicial
 
 ### 🛠 En el entorno de .NET
 
@@ -141,7 +134,7 @@ psql -U postgres -d transactions_db -c "SELECT * FROM \"Transactions\";"
 
 ---
 
-## 🗄️ Ejecucion del Proyecto {#execution}
+## 🗄️ Ejecucion del Proyecto
 
 ### 📌 **1. Crear una transacción** (`POST http://localhost:5000/api/transaction`)
 
@@ -176,7 +169,7 @@ kafkacat -b localhost:9092 -t transactions -C -o beginning
 
 ---
 
-## 📁 Arquitecutra de la solucion {#architecture}
+## 📁 Arquitecutra de la solucion
 
 La arquitectura utilizada para la solución del proyecto es **Arquitectura Hexagonal** y podemos verla representada de la siguiente manera
 
